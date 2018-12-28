@@ -1,7 +1,6 @@
 #include "FocusStacking.h"
 
-FocusStacking::FocusStacking(std::shared_ptr<Filter> filter){
-    filter_=filter;
+FocusStacking::FocusStacking(std::shared_ptr<Filter> filter):filter_(filter){
 }
 FocusStacking::~FocusStacking(){}
 void FocusStacking::addInputImage(cv::Mat image){

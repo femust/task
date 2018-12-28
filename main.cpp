@@ -30,6 +30,8 @@ int main (int argc, char *argv[])
 //}else {
 //    std::cout << "main Loaded: " << images.size() << " images. " << std::endl;
 //}
+shared_ptr<Filter> as=std::make_shared<Laplace4>();
+as = FilterFactory::make_filter(EdgeDetectionMethod::Laplace4);
 
 FocusStacking focusstacker(FilterFactory::make_filter(EdgeDetectionMethod::Laplace4));
 //focusstacker.debug(true);
