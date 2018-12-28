@@ -13,7 +13,7 @@ enum class EdgeDetectionMethod{
 
 class Filter{
 public:
-    cv::Mat execute(cv::Mat image);
+    cv::Mat execute(cv::Mat);
 };
 
 class FilterFactory{

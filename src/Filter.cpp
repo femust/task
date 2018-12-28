@@ -13,6 +13,11 @@ std::shared_ptr<Filter> FilterFactory::make_filter(EdgeDetectionMethod method) {
     }
 }
 
+cv::Mat Filter::execute(cv::Mat image){
+    std::cout << "jest ok  " << image.size() << std::endl;
+    return image;
+}
+
 
 
 
