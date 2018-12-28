@@ -16,29 +16,10 @@ std::shared_ptr<Filter> FilterFactory::make_filter(EdgeDetectionMethod method) {
     }
 }
 
-cv::Mat Filter::execute(cv::Mat image){
-    cv::Mat filtered(image);
-    std::vector< std::vector<int>> kernel=get_kernel();
-    float sum;
-    uchar x1,y1;
-    std::cout << " KErnel will be printed" << std::endl;
-    for(auto it=kernel.begin();it<kernel.end();it++)
-    {
-        for (auto it2=(*it).begin();it2<(*it).end();it2++)
-        {
-            std::cout << *it2 << " " ;
-        }
-        std::cout << std::endl;
-    }
-    std::cout << " image will be printed" << std::endl;
-    std::cout << image << std::endl;
-
-
-    //cv::filter2D(image,filtered,image.depth(),kernel,)
-
-
-
-    return image;
+cv::Mat Filter::execute(cv::Mat image,cv::Mat kernel){
+    cv::Mat filtered;
+    cv::filter2D(image,filtered,-1,kernel);
+    return filtered;
 }
 
 

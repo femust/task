@@ -1,23 +1,30 @@
 #ifndef MERGE_H
 #define MERGE_H
 
+#include<iostream>
+#include <stdio.h>
 
-class Merge
-{
-public:
-    Merge();
-    virtual void execute() = 0;
-    virtual void display() = 0;
+#include <opencv2/opencv.hpp>
+
+enum class MergeMethod{
+    Maximum,
 };
 
-
-class AlwaysMaximum : public Merge
-{
+class Merge{
 public:
-    AlwaysMaximum();
-    execute();
-    display();
+    virtual cv::Mat execute(std::vector<cv::Mat>) = 0;
 };
+
+class MergeFactory{
+public:
+    static std::shared_ptr<Merge> make_merge(MergeMethod);
+};
+
+class Maximum : public Merge{
+public:
+    cv::Mat execute(std::vector<cv::Mat>);
+};
+
 
 
 

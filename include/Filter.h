@@ -14,8 +14,8 @@ enum class EdgeDetectionMethod{
 
 class Filter{
 public:
-    cv::Mat execute(cv::Mat);
-    virtual std::vector< std::vector<int>> get_kernel()=0;
+    cv::Mat execute(cv::Mat,cv::Mat);
+    virtual cv::Mat get_kernel()=0;
 };
 
 class FilterFactory{
@@ -25,36 +25,24 @@ public:
 
 class Laplace4 : public Filter{
 public:
-    std::vector< std::vector<int>> get_kernel() override{return kernel_;};
+    cv::Mat get_kernel() override{return kernel_;};
 private:
-    std::vector< std::vector<int>>  kernel_={{0,-1,0},
-                                             {-1,4,-1},
-                                             {0,-1,0}};
+    cv::Mat kernel_ = (cv::Mat_<double>(3,3) << 0, -1, 0, -1, 4, -1, 0, -1, 0);
 };
 
 class Laplace8 : public Filter{
 public:
-    std::vector< std::vector<int>> get_kernel() override{return kernel_;};
+    cv::Mat get_kernel() override{return kernel_;};
 private:
-    std::vector< std::vector<int>> kernel_={{-1,-1,-1},
-                                             {-1,8,-1},
-                                             {-1,-1,-1}};
+    cv::Mat kernel_ = (cv::Mat_<double>(3,3) << -1,-1,-1,-1,8,-1,-1,-1,-1);
 };
 
 class ZeroFilter : public Filter{
 public:
-    std::vector< std::vector<int>> get_kernel() override{return kernel_;};
+    cv::Mat get_kernel() override{return kernel_;};
 private:
-    std::vector< std::vector<int>> kernel_={{0,0,0},
-                                             {0,0,0},
-                                             {0,0,0}};
+   cv::Mat kernel_ = (cv::Mat_<double>(3,3) << 0, 0, 0, 0, 0, 0, 0, 0, 0);
 };
-
-
-
-
-
-
 
 
 #endif // FILTER_H
