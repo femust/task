@@ -16,10 +16,14 @@ public:
     Filter();
     virtual ~Filter();
     cv::Mat execute(cv::Mat image);
-    void set_filter(EdgeDetectionMethod);
     virtual void display()=0;
-private:
     std::shared_ptr<Filter> filter_;
+};
+
+class FilterFactory{
+public:
+    FilterFactory();
+    static std::shared_ptr<Filter> make_filter(EdgeDetectionMethod);
 };
 
 class Laplace4 : public Filter{

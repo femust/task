@@ -13,14 +13,10 @@
 class FocusStacking
 {
 public:
-    FocusStacking();
+    FocusStacking(std::shared_ptr<Filter>);
     ~FocusStacking();
 
-    enum class EdgeDetectionMethod
-    {
-        Laplace4,
-        Laplace8,
-    };
+
 
     enum class MergeStrategy
             {
@@ -51,7 +47,7 @@ private:
     EdgeDetectionMethod edgeMethod_;
     MergeStrategy mergeStrategy_;
     std::vector<cv::Mat> images_;
-    Filter *filter_=nullptr;
+    std::shared_ptr<Filter> filter_;
 
     bool debug_;
 

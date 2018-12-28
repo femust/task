@@ -1,14 +1,18 @@
 #include "Filter.h"
 
-Filter::Filter(){}
+Filter::Filter(){
+    filter_=std::make_shared<Laplace4>();
+}
 Filter::~Filter(){}
-void Filter::set_filter(EdgeDetectionMethod method) {
+
+FilterFactory::FilterFactory(){}
+std::shared_ptr<Filter> FilterFactory::make_filter(EdgeDetectionMethod method) {
     if (method == EdgeDetectionMethod::Laplace4) {
          std::cout << "Laplace4 method chosen" << std::endl;
-         filter_=std::make_shared<Laplace4>();
+         return std::make_shared<Laplace4>();
     }else if (method == EdgeDetectionMethod::Laplace8) {
         std::cout << "Laplace8 method chosen" << std::endl;
-        filter_= std::make_shared<Laplace8>();
+        return std::make_shared<Laplace8>();
     }else {
         std::cout << "Wrong method" << std::endl;
         //throw error
