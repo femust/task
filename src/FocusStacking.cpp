@@ -9,6 +9,12 @@ void FocusStacking::addInputImage(cv::Mat image){
         std::cout << "Added image: " << images_.size() << std::endl;
     }
 }
+void FocusStacking::run_filter(){
+    for (auto it=images_.begin();it<images_.end();it++){
+        images_filtered_.push_back(filter_->execute(*it));
+    }
+}
 void FocusStacking::run(){}
-void FocusStacking::debug(bool debug=false)
-{}
+void FocusStacking::debug(bool debug=false){
+    std::cout << "There are " << images_.size() << " images." << std::endl;
+}

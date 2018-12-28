@@ -9,11 +9,13 @@
 enum class EdgeDetectionMethod{
     Laplace4,
     Laplace8,
+    ZeroFilter,
 };
 
 class Filter{
 public:
     cv::Mat execute(cv::Mat);
+    virtual std::vector< std::vector<int>> get_kernel()=0;
 };
 
 class FilterFactory{
@@ -22,6 +24,8 @@ public:
 };
 
 class Laplace4 : public Filter{
+public:
+    std::vector< std::vector<int>> get_kernel() override{return kernel_;};
 private:
     std::vector< std::vector<int>>  kernel_={{0,-1,0},
                                              {-1,4,-1},
@@ -29,10 +33,21 @@ private:
 };
 
 class Laplace8 : public Filter{
+public:
+    std::vector< std::vector<int>> get_kernel() override{return kernel_;};
 private:
     std::vector< std::vector<int>> kernel_={{-1,-1,-1},
                                              {-1,8,-1},
                                              {-1,-1,-1}};
+};
+
+class ZeroFilter : public Filter{
+public:
+    std::vector< std::vector<int>> get_kernel() override{return kernel_;};
+private:
+    std::vector< std::vector<int>> kernel_={{0,0,0},
+                                             {0,0,0},
+                                             {0,0,0}};
 };
 
 
