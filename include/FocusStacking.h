@@ -4,6 +4,7 @@
 #include<vector>
 
 #include<iostream>
+#include<string>
 
 #include <opencv2/opencv.hpp>
 
@@ -21,7 +22,7 @@ public:
     void run();
     void run_filter();
     void run_merger();
-
+    void save_image(cv::Mat,std::string);
     void debug(bool debug);
 
 
@@ -35,6 +36,7 @@ private:
 
     cv::Mat merged_image_;
     cv::Mat lookup_image_;
+    cv::Mat depth_image_;
 
     bool debug_;
 

@@ -5,13 +5,11 @@ std::shared_ptr<Merge> MergeFactory::make_merge(MergeMethod method){
         std::cout << "Maximum method chose"<<std::endl;
         return std::make_shared<Maximum>();
     }else{
-        std::cout << "Wrong method" << std::endl;
-        //throw error
+        throw std::invalid_argument( "Wrong method");
     }
 }
 
 void Maximum::execute(std::vector<cv::Mat> &images,cv::Mat &lookup, cv::Mat &merged){
-    //Lut to optimize
     int distance;
     int max;
     lookup=cv::Mat::zeros(images[0].rows, images[0].cols, CV_32SC1);;

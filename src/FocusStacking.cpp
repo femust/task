@@ -35,7 +35,7 @@ void FocusStacking::run_filter(){
 void FocusStacking::run_merger(){
     if (images_[0].channels()==1){
         merged_image_=cv::Mat::zeros(images_[0].rows,images_[0].cols, CV_8UC1);
-        merger_->execute(images_,merged_image_,lookup_image_);
+        merger_->execute(images_,lookup_image_,merged_image_);
     } else if (images_[0].channels()==3){
         merged_image_=cv::Mat::zeros(images_[0].rows,images_[0].cols, CV_8UC3);
         std::vector<cv::Mat> rVectorchannel;
@@ -56,16 +56,34 @@ void FocusStacking::run_merger(){
     }
 }
 
+void FocusStacking::save_image(cv::Mat image,std::string file_name)
+{
+    imwrite( file_name, image );
+}
+
 void FocusStacking::run(){
     run_filter();
     run_merger();
+    save_image(merged_image_,"result.png");
 
-    cv::namedWindow( "Final window",cv::WINDOW_AUTOSIZE );// Create a window for display.
+
+    cv::Mat depth=cv::Mat::zeros(lookup_image_.rows,lookup_image_.cols, CV_8UC1);
+    int coefficient=255/images_.size();
+    for (int i=0;i<lookup_image_.rows;i++)
+    {
+        for (int j=0;j<lookup_image_.cols;j++)
+        {
+            depth.at<uchar>(i,j)=uchar(255-lookup_image_.at<int>(i,j)*coefficient);
+        }
+    }
+
+    cv::namedWindow( "Final window",cv::WINDOW_AUTOSIZE );
    // std::cout << merged_image_ << std::endl;
    // std::cout <<merged_image_<< std::endl;
-    cv::imshow( "Final window", merged_image_ );                   // Show our image inside it.
-    cv::waitKey(0);
+    cv::imshow( "Final window", depth );
+cv::waitKey(0);
+
+    save_image(depth,"lookup.png");
+
 }
-void FocusStacking::debug(bool debug=false){
-    std::cout << "There are " << images_.size() << " images." << std::endl;
-}
+void FocusStacking::debug(bool debug=false){}
