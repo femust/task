@@ -56,6 +56,7 @@ void FocusStacker::run_merger(std::vector<cv::Mat> images){
 
 void FocusStacker::save_image(cv::Mat image,std::string file_name)
 {
+    std::cout << "Saved" << image << std::endl;
     imwrite( file_name, image );
 }
 
