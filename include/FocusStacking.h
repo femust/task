@@ -34,6 +34,7 @@ private:
     std::shared_ptr<Merge> merger_;
 
     cv::Mat merged_image_;
+    cv::Mat lookup_image_;
 
     bool debug_;
 

@@ -10,37 +10,25 @@ std::shared_ptr<Merge> MergeFactory::make_merge(MergeMethod method){
     }
 }
 
-cv::Mat Maximum::execute(std::vector<cv::Mat> images_){
-    int rows=images_[0].rows;
-    int columns=images_[0].cols;
-    int distance=0;
-    int max=0;
-    for (auto it=images_.begin();it<images_.end();it++)
-    {
-        std::cout << "Matrix: " << std::endl;
-        std::cout << *it << std::endl;
-    }
-    cv::Mat merged_lookup = cv::Mat::zeros(rows, columns, CV_32S);
-    cv::Mat merged = cv::Mat::zeros(rows, columns, CV_32S);
-    std::cout << merged << std::endl;
-
-    for (auto i=0; i<rows; i++){
-        for (auto j=0; j<columns; j++){
+void Maximum::execute(std::vector<cv::Mat> &images,cv::Mat &lookup, cv::Mat &merged){
+    //Lut to optimize
+    int distance;
+    int max;
+    lookup=cv::Mat::zeros(images[0].rows, images[0].cols, CV_32SC1);;
+    merged=cv::Mat::zeros(images[0].rows, images[0].cols, CV_8UC1);
+    for (auto i=0; i<images[0].rows; i++){
+        for (auto j=0; j<images[0].cols; j++){
             max=0;
-            for (auto it=images_.begin();it<images_.end();it++){
-                distance=std::distance(images_.begin(),it);
-                std::cout <<max << " < " << int(it->at<int>(i,j))<< "result: " << (max < it->at<int>(i,j)) << " distance: " << distance << std::endl;
-                if (max < it->at<int>(i,j)){
-                    max = it->at<int>(i,j);
-                    merged_lookup.at<int>(i,j)=distance;
+            distance=0;
+            for (auto it=images.begin();it<images.end();it++){
+                distance=std::distance(images.begin(),it);
+                if (max <= int(it->at<uchar>(i,j))){
+                    max = int(it->at<uchar>(i,j));
+                    lookup.at<int>(i,j)=distance;
                 }
             }
-            merged.at<int>(i,j)=images_[merged_lookup.at<int>(i,j)].at<int>(i,j);
+            merged.at<uchar>(i,j)=images[lookup.at<int>(i,j)].at<uchar>(i,j);
         }
     }
-    std::cout << "Result: " << std::endl;
-    std::cout << merged_lookup << std::endl;
-    std::cout << merged << std::endl;
-    return merged;
 }
 

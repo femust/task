@@ -12,7 +12,7 @@ enum class MergeMethod{
 
 class Merge{
 public:
-    virtual cv::Mat execute(std::vector<cv::Mat>) = 0;
+    virtual void execute(std::vector<cv::Mat>&,cv::Mat&,cv::Mat&) = 0;
 };
 
 class MergeFactory{
@@ -22,7 +22,7 @@ public:
 
 class Maximum : public Merge{
 public:
-    cv::Mat execute(std::vector<cv::Mat>);
+    void execute(std::vector<cv::Mat>&,cv::Mat&,cv::Mat&);
 };
 
 

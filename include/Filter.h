@@ -27,21 +27,21 @@ class Laplace4 : public Filter{
 public:
     cv::Mat get_kernel() override{return kernel_;};
 private:
-    cv::Mat kernel_ = (cv::Mat_<double>(3,3) << 0, -1, 0, -1, 4, -1, 0, -1, 0);
+    cv::Mat kernel_ = (cv::Mat_<float>(3,3) << 0, -1, 0, -1, 4, -1, 0, -1, 0);
 };
 
 class Laplace8 : public Filter{
 public:
     cv::Mat get_kernel() override{return kernel_;};
 private:
-    cv::Mat kernel_ = (cv::Mat_<double>(3,3) << -1,-1,-1,-1,8,-1,-1,-1,-1);
+    cv::Mat kernel_ = (cv::Mat_<float>(3,3) << -1,-1,-1,-1,8,-1,-1,-1,-1);
 };
 
 class ZeroFilter : public Filter{
 public:
     cv::Mat get_kernel() override{return kernel_;};
 private:
-   cv::Mat kernel_ = (cv::Mat_<double>(3,3) << 0, 0, 0, 0, 0, 0, 0, 0, 0);
+   cv::Mat kernel_ = (cv::Mat_<float>(3,3) << 0, 0, 0, 0, 0, 0, 0, 0, 0);
 };
 
 
