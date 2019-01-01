@@ -4,7 +4,7 @@
 #include<vector>
 #include<string>
 
-#include "FocusStacking.h"
+#include "FocusStacker.h"
 
 using namespace cv;
 using namespace std;
@@ -22,8 +22,7 @@ int main (int argc, char *argv[]){
         return 0;
     } else if (argc==3){
         path=argv[1];
-        std::cout << "Loading from the folder: " << path << std::endl;
-        std::cout << "argv2: " << argv[2] << std::endl;
+        std::cout << "Loading from a folder: " << path << std::endl;
         if (!strcmp(argv[2], "gray")){
             mode=cv::IMREAD_GRAYSCALE;
             std::cout <<"hehe" << std::endl;
@@ -48,7 +47,7 @@ int main (int argc, char *argv[]){
     }else {
         std::cout << "In main.cpp file there are " << images.size()  << std::endl;
     }
-    FocusStacking focusstacker(FilterFactory::make_filter(EdgeDetectionMethod::Laplace8),MergeFactory::make_merge(MergeMethod::Maximum));
+    FocusStacker focusstacker(FilterFactory::make_filter(EdgeDetectionMethod::Laplace8),MergeFactory::make_merge(MergeMethod::Maximum));
     for (auto it=images.begin();it<images.end();it++){
         focusstacker.addInputImage(*it);
     }

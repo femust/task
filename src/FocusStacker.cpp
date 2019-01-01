@@ -1,27 +1,25 @@
-#include "FocusStacking.h"
+#include "FocusStacker.h"
 
-FocusStacking::FocusStacking(std::shared_ptr<Filter> filter,std::shared_ptr<Merge> merger):filter_(filter),merger_(merger){
+FocusStacker::FocusStacker(std::shared_ptr<Filter> filter,std::shared_ptr<Merge> merger):filter_(filter),merger_(merger){
 }
-FocusStacking::~FocusStacking(){}
-void FocusStacking::addInputImage(cv::Mat image){
+FocusStacker::~FocusStacker(){}
+void FocusStacker::addInputImage(cv::Mat image){
     images_.emplace_back(image);
     if(debug_){
         std::cout << "Added image: " << images_.size() << std::endl;
     }
 }
-void FocusStacking::run_filter(){
+void FocusStacker::run_filter(std::vector<cv::Mat> images){
     cv::Mat kernel=filter_->get_kernel();
-    if (images_[0].channels()==1){
-
-        for (auto it=images_.begin();it<images_.end();it++){
+    if (images[0].channels()==1){
+        for (auto it=images.begin();it<images.end();it++){
         images_filtered_.push_back(filter_->execute(*it,kernel));
         }
-    } else if (images_[0].channels()==3){
-
+    } else if (images[0].channels()==3){
        std::vector<cv::Mat> channels(3);
        std::vector<cv::Mat> channels_filtered(3);
        cv::Mat image_filtered;
-       for (auto it=images_.begin();it<images_.end();it++){
+       for (auto it=images.begin();it<images.end();it++){
            cv::split(*it,channels);
            channels_filtered[0]=filter_->execute(channels[0],kernel);
            channels_filtered[1]=filter_->execute(channels[1],kernel);
@@ -32,17 +30,17 @@ void FocusStacking::run_filter(){
     }
 }
 
-void FocusStacking::run_merger(){
-    if (images_[0].channels()==1){
-        merged_image_=cv::Mat::zeros(images_[0].rows,images_[0].cols, CV_8UC1);
-        merger_->execute(images_,lookup_image_,merged_image_);
-    } else if (images_[0].channels()==3){
-        merged_image_=cv::Mat::zeros(images_[0].rows,images_[0].cols, CV_8UC3);
+void FocusStacker::run_merger(std::vector<cv::Mat> images){
+    if (images[0].channels()==1){
+        merged_image_=cv::Mat::zeros(images[0].rows,images[0].cols, CV_8UC1);
+        merger_->execute(images,lookup_image_,merged_image_);
+    } else if (images[0].channels()==3){
+        merged_image_=cv::Mat::zeros(images[0].rows,images[0].cols, CV_8UC3);
         std::vector<cv::Mat> rVectorchannel;
         std::vector<cv::Mat> bVectorchannel;
         std::vector<cv::Mat> gVectorchannel;
         std::vector<cv::Mat> channels_filtered(3);
-        for (auto it=images_.begin();it<images_.end();it++){
+        for (auto it=images.begin();it<images.end();it++){
             cv::Mat channels[3];
             cv::split(*it,channels);
             rVectorchannel.push_back(channels[0]);
@@ -56,17 +54,15 @@ void FocusStacking::run_merger(){
     }
 }
 
-void FocusStacking::save_image(cv::Mat image,std::string file_name)
+void FocusStacker::save_image(cv::Mat image,std::string file_name)
 {
     imwrite( file_name, image );
 }
 
-void FocusStacking::run(){
-    run_filter();
-    run_merger();
+void FocusStacker::run(){
+    run_filter(images_);
+    run_merger(images_);
     save_image(merged_image_,"result.png");
-
-
     cv::Mat depth=cv::Mat::zeros(lookup_image_.rows,lookup_image_.cols, CV_8UC1);
     int coefficient=255/images_.size();
     for (int i=0;i<lookup_image_.rows;i++)
@@ -76,14 +72,7 @@ void FocusStacking::run(){
             depth.at<uchar>(i,j)=uchar(255-lookup_image_.at<int>(i,j)*coefficient);
         }
     }
-
-    cv::namedWindow( "Final window",cv::WINDOW_AUTOSIZE );
-   // std::cout << merged_image_ << std::endl;
-   // std::cout <<merged_image_<< std::endl;
-    cv::imshow( "Final window", depth );
-cv::waitKey(0);
-
-    save_image(depth,"lookup.png");
+    save_image(depth,"depth.png");
 
 }
-void FocusStacking::debug(bool debug=false){}
+void FocusStacker::debug(bool debug=false){}

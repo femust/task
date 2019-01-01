@@ -1,5 +1,5 @@
-#ifndef FOCUSSTACKING_H
-#define FOCUSSTACKING_H
+#ifndef FocusStacker_H
+#define FocusStacker_H
 
 #include<vector>
 
@@ -11,24 +11,21 @@
 #include "Filter.h"
 #include "Merge.h"
 
-class FocusStacking{
+class FocusStacker{
 public:
-    FocusStacking(std::shared_ptr<Filter>,std::shared_ptr<Merge>);
-    ~FocusStacking();
+    FocusStacker(std::shared_ptr<Filter>,std::shared_ptr<Merge>);
+    ~FocusStacker();
 
     void addInputImage(cv::Mat image);
-
-
     void run();
-    void run_filter();
-    void run_merger();
+
+protected:
+    void run_filter(std::vector<cv::Mat>);
+    void run_merger(std::vector<cv::Mat>);
     void save_image(cv::Mat,std::string);
     void debug(bool debug);
 
-
-
 private:
-
     std::vector<cv::Mat> images_;
     std::vector<cv::Mat> images_filtered_;
     std::shared_ptr<Filter> filter_;
@@ -39,13 +36,6 @@ private:
     cv::Mat depth_image_;
 
     bool debug_;
-
-
-
-
-
-
-
 };
 
-#endif // FOCUSSTACKING_H
+#endif // FocusStacker_H
